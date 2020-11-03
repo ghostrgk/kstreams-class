@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>homework</module>
         <module>bom</module>
         <module>betmodel</module>
         <module>stateless</module>

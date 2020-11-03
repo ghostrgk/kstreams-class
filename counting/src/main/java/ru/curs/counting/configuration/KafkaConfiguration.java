@@ -24,6 +24,4 @@ public class KafkaConfiguration {
         KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
         return streamsConfig;
     }
-
-
 }
