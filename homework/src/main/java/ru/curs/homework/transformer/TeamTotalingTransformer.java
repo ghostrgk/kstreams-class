@@ -42,23 +42,12 @@ public class TeamTotalingTransformer implements
     @Override
     public KeyValue<String, Long> transform(Bet key, Long value,
                                             KeyValueStore<String, Long> stateStore) {
-
-        String team = null;
-        Outcome outcome = key.getOutcome();
-        switch (outcome) {
-            case H:
-                team = key.getMatch().split("-")[0];
-                break;
-            case D:
-                return null;
-            case A:
-                team = key.getMatch().split("-")[1];
-                break;
-        }
+        String team = String.format("%s:%s", key.getMatch(), key.getOutcome());
 
         long current = Optional.ofNullable(stateStore.get(team)).orElse(0L);
         current += value;
         stateStore.put(team, current);
+
         return KeyValue.pair(team, current);
     }
 }

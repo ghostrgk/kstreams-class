@@ -40,12 +40,12 @@ public class BettorTotalingTransformer implements
     @Override
     public KeyValue<String, Long> transform(Bet key, Long value,
                                             KeyValueStore<String, Long> stateStore) {
-        assert value >= 0;
-
         String bettor = key.getBettor();
+
         long current = Optional.ofNullable(stateStore.get(bettor)).orElse(0L);
         current += value;
         stateStore.put(bettor, current);
+
         return KeyValue.pair(bettor, current);
     }
 }
