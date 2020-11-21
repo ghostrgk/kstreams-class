@@ -36,13 +36,19 @@ public class TeamTotalingTransformer implements
 
     @Override
     public Serde<Long> storeValueSerde() {
-        return new JsonSerde<>(Long.class);//Serdes.Long();
+        return new JsonSerde<>(Long.class);
     }
 
     @Override
     public KeyValue<String, Long> transform(Bet key, Long value,
                                             KeyValueStore<String, Long> stateStore) {
-        String team = String.format("%s:%s", key.getMatch(), key.getOutcome());
+        if (key.getOutcome() == Outcome.D) {
+            return null;
+        }
+
+        String[] teams = key.getMatch().split("-");
+
+        String team = key.getOutcome() == Outcome.H ? teams[0] : teams[1];
 
         long current = Optional.ofNullable(stateStore.get(team)).orElse(0L);
         current += value;

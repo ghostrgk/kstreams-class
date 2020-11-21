@@ -61,46 +61,46 @@ public class TestTopology {
         betsTopic.pipeInput(bet1.key(), bet1);
 
         TestRecord<String, Long> team_record1 = teamTopic.readRecord();
-        assertEquals("Netherlands-Germany:A", team_record1.key());
-        assertEquals(170L, team_record1.value().longValue());
+        assertEquals("Germany", team_record1.key());
+        assertEquals(100L, team_record1.value().longValue());
 
         TestRecord<String, Long> bettor_record1 = bettorTopic.readRecord();
         assertEquals("Ann", bettor_record1.key());
-        assertEquals(170L, bettor_record1.value().longValue());
+        assertEquals(100L, bettor_record1.value().longValue());
 
 
         Bet bet2 = Bet.builder()
                 .bettor("Bob")
                 .match("Netherlands-Germany")
                 .outcome(Outcome.H)
-                .amount(100)
-                .odds(1.8).build();
+                .amount(110)
+                .odds(0.5).build();
 
         betsTopic.pipeInput(bet2.key(), bet2);
         TestRecord<String, Long> team_record2 = teamTopic.readRecord();
-        assertEquals("Netherlands-Germany:H", team_record2.key());
-        assertEquals(180L, team_record2.value().longValue());
+        assertEquals("Netherlands", team_record2.key());
+        assertEquals(110L, team_record2.value().longValue());
 
         TestRecord<String, Long> bettor_record2 = bettorTopic.readRecord();
         assertEquals("Bob", bettor_record2.key());
-        assertEquals(180L, bettor_record2.value().longValue());
+        assertEquals(110L, bettor_record2.value().longValue());
 
 
         Bet bet3 = Bet.builder()
                 .bettor("Bob")
                 .match("Netherlands-Germany")
                 .outcome(Outcome.A)
-                .amount(100)
-                .odds(1.9).build();
+                .amount(200)
+                .odds(2.0).build();
 
         betsTopic.pipeInput(bet3.key(), bet3);
         TestRecord<String, Long> team_record3 = teamTopic.readRecord();
-        assertEquals("Netherlands-Germany:A", team_record3.key());
-        assertEquals(170L + 190L, team_record3.value().longValue());
+        assertEquals("Germany", team_record3.key());
+        assertEquals(100L + 200L, team_record3.value().longValue());
 
         TestRecord<String, Long> bettor_record3 = bettorTopic.readRecord();
         assertEquals("Bob", bettor_record3.key());
-        assertEquals(180L + 190L, bettor_record3.value().longValue());
+        assertEquals(110L + 200L, bettor_record3.value().longValue());
 
 
         long current = System.currentTimeMillis();
@@ -111,7 +111,7 @@ public class TestTopology {
         betsTopic.pipeInput(value1.key(), value1);
         Bet value2 = new Bet("Bob", "Cyprus-Belgium", Outcome.H, 1, 1, current - 100);
         betsTopic.pipeInput(value2.key(), value2);
-        Bet value3 = new Bet("B", "Cyprus-Belgium", Outcome.H, 1, 1, current - 5000);
+        Bet value3 = new Bet("Bob", "Cyprus-Belgium", Outcome.H, 1, 1, current - 5000);
         betsTopic.pipeInput(value3.key(), value3);
 
         Fraud expectedFraud = Fraud.builder()

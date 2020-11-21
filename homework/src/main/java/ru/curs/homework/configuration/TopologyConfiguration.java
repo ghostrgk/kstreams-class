@@ -31,7 +31,7 @@ public class TopologyConfiguration {
 
 
         KStream<Bet, Long> counted = bets.map(
-                (key, value) -> KeyValue.pair(value, Math.round(value.getAmount() * value.getOdds()))
+                (key, value) -> KeyValue.pair(value, value.getAmount())
         );
 //        ).through("counted", Produced.with(new JsonSerde<>(Bet.class), new JsonSerde<>(Long.class)));
 
@@ -66,7 +66,7 @@ public class TopologyConfiguration {
                 StreamJoined.with(Serdes.String(),
                         new JsonSerde<>(Bet.class),
                         new JsonSerde<>(Bet.class)
-                ));
+                )).selectKey((k, fraud) -> fraud.getBettor());
 
         frauds.to(FRAUD_TOPIC, Produced.with(Serdes.String(), new JsonSerde<>(Fraud.class)));
 

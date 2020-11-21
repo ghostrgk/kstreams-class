@@ -34,7 +34,7 @@ public class BettorTotalingTransformer implements
 
     @Override
     public Serde<Long> storeValueSerde() {
-        return new JsonSerde<>(Long.class);//Serdes.Long();
+        return new JsonSerde<>(Long.class);
     }
 
     @Override
